@@ -1,0 +1,5 @@
+[control]
+control sensible_connection=local ansible_user=root
+
+[target]
+target ansible_user=root

@@ -1,0 +1,26 @@
+---
+# tasks file for SaltMaster
+- name: Install Salt API
+  apt:
+    name: salt-api
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt Master
+  apt:
+    name: salt-master
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt Minion
+  apt:
+    name: salt-minion
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+

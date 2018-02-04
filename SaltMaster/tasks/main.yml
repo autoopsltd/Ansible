@@ -1,0 +1,63 @@
+---
+# tasks file for SaltMaster
+
+- name: Add Repository Key
+  apt_key:
+    url: https://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest/SALTSTACK-GPG-KEY.pub
+    state: present
+
+- name: Setup Repository
+  apt_repository:
+    repo: deb http://repo.saltstack.com/apt/ubuntu/14.04/amd64/latest trusty main
+    state: present
+    filename: 'saltstack.list'
+
+- name: Install Salt Master
+  apt:
+    name: salt-master
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt Minion
+  apt:
+    name: salt-minion
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt SSH
+  apt:
+    name: salt-ssh
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt Syndic
+  apt:
+    name: salt-syndic
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt Cloud
+  apt:
+    name: salt-cloud
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+- name: Install Salt API
+  apt:
+    name: salt-api
+    update_cache: yes
+    state: present
+    install_recommends: yes
+    force_apt_get: yes
+
+
