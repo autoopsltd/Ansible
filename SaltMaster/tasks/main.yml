@@ -60,4 +60,20 @@
     install_recommends: yes
     force_apt_get: yes
 
+- name: Configure Master Bind Address
+  lineinfile: 
+     path=/etc/salt/master 
+     state=present 
+     backrefs=yes 
+     regexp="^#interface':' 0.0.0.0" 
+     line="interface{':' 192.168.0.8"
+  notify: restart salt-master
 
+- name: Configure Minion Master Address
+  lineinfile: 
+     path=/etc/salt/minion 
+     state=present 
+     backrefs=yes 
+     regexp="^#master':' salt" 
+     line="master':' 192.168.0.8"
+  notify: restart salt-minion 
