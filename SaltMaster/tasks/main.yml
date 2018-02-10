@@ -15,7 +15,8 @@
 - name: Install Salt Master
   apt:
     name: salt-master
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -23,7 +24,8 @@
 - name: Install Salt Minion
   apt:
     name: salt-minion
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -31,7 +33,8 @@
 - name: Install Salt SSH
   apt:
     name: salt-ssh
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -39,7 +42,8 @@
 - name: Install Salt Syndic
   apt:
     name: salt-syndic
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -47,7 +51,8 @@
 - name: Install Salt Cloud
   apt:
     name: salt-cloud
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -55,7 +60,8 @@
 - name: Install Salt API
   apt:
     name: salt-api
-    update_cache: yes
+    update_cache: yes 
+    cache_valid_time: 86400
     state: present
     install_recommends: yes
     force_apt_get: yes
@@ -65,8 +71,8 @@
      path=/etc/salt/master 
      state=present 
      backrefs=yes 
-     regexp="^#interface':' 0.0.0.0" 
-     line="interface{':' 192.168.0.8"
+     regexp="^#interface{{ ":" }} 0.0.0.0" 
+     line="interface{{ ":" }} 192.168.0.8"
   notify: restart salt-master
 
 - name: Configure Minion Master Address
@@ -74,6 +80,40 @@
      path=/etc/salt/minion 
      state=present 
      backrefs=yes 
-     regexp="^#master':' salt" 
-     line="master':' 192.168.0.8"
+     regexp="^#master{{ ":" }} salt" 
+     line="master{{ ":" }} 192.168.0.8"
   notify: restart salt-minion 
+
+- name: List Minion Key Fingerprint
+  shell: salt-call --local key.finger >> minionSaltKey.txt
+  args:
+     chdir: /tmp
+     creates: minionSaltKey.txt
+
+- name: List Master Key Fingerprint
+  shell: salt-key -F master >> masterSaltKey.txt
+  args:
+     chdir: /tmp 
+     creates: masterSaltKey.txt
+
+- name: List Known Keys (default)
+  shell: salt-key -L >> knownKeys.default.txt
+  args:
+     chdir: /tmp
+     creates: knownKeys.default.txt
+
+- name: Add Known Keys
+  shell: salt-key -A -y >> addedKeys.txt
+  args:
+     chdir: /tmp
+     creates: addedKeys.txt
+
+- name: List Known Keys (added)
+  shell: salt-key -L >> knownKeys.added.txt
+  args:
+     chdir: /tmp
+     creates: knownKeys.added.txt
+
+- name: Test Connectivity
+  command: salt target test.ping
+
